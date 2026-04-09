@@ -1,0 +1,35 @@
+# ThinkingPipe Configuration
+# 사물쇼츠 AI 영상 자동화 파이프라인
+
+# Claude API
+claude:
+  model: claude-sonnet-4-6-20250514
+  max_tokens: 4096
+
+# TTS (gTTS)
+tts:
+  lang: ko
+  slow: false
+
+# Video (Veo 3.1)
+video:
+  model: veo-3.1
+  duration: 60        # seconds
+  aspect_ratio: "9:16" # shorts format
+  resolution: "1080x1920"
+
+# Thumbnail
+thumbnail:
+  width: 1280
+  height: 720
+
+# Upload
+upload:
+  platform: youtube
+  visibility: private  # private → manual publish
+
+# Pipeline
+pipeline:
+  output_dir: ./output
+  review_gates: true   # human y/n at each gate
+  max_retries: 2
