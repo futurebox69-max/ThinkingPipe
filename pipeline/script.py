@@ -1,7 +1,5 @@
 """Step 2: 60초 사물 독백 대본 생성 — Thinking OS 5단계 적용"""
 
-import anthropic
-
 SCRIPT_PROMPT = """\
 당신은 사물쇼츠 대본 작가입니다.
 아래 아이디어 프레임을 바탕으로 60초 분량의 사물 1인칭 독백 대본을 작성하세요.
@@ -70,6 +68,7 @@ def generate_script(idea: dict, config: dict, dry_run: bool = False) -> dict:
             "estimated_seconds": 60,
         }
 
+    import anthropic
     client = anthropic.Anthropic()
     claude_config = config.get("claude", {})
 

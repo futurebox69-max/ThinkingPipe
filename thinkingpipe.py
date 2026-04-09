@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ThinkingPipe — 사물쇼츠 AI 영상 자동화 파이프라인 CLI
+"""ThinkingPipe -사물쇼츠 AI 영상 자동화 파이프라인 CLI
 
 Thinking OS 5단계(현상→패턴→구조→전제해체→재설계)를
 60초 사물 독백 대본에 적용하여 쇼츠 영상을 자동 생성합니다.
@@ -10,9 +10,16 @@ Usage:
     python thinkingpipe.py --topic "우산" --output ./output/umbrella
 """
 
+import os
 import sys
 from pathlib import Path
 from datetime import datetime
+
+# Force UTF-8 on Windows
+os.environ.setdefault("PYTHONIOENCODING", "utf-8")
+if sys.stdout.encoding != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
 
 import click
 import yaml
@@ -45,7 +52,7 @@ def load_config(config_path: str = "config.yaml") -> dict:
 @click.option("--config", default="config.yaml", help="설정 파일 경로")
 @click.option("--auto-approve", is_flag=True, default=False, help="모든 검수 게이트 자동 승인")
 def main(topic: str, dry_run: bool, output: str, config: str, auto_approve: bool):
-    """ThinkingPipe — 사물쇼츠 AI 영상 자동화 파이프라인"""
+    """ThinkingPipe -사물쇼츠 AI 영상 자동화 파이프라인"""
     cfg = load_config(config)
 
     # Output directory
@@ -60,27 +67,27 @@ def main(topic: str, dry_run: bool, output: str, config: str, auto_approve: bool
             f"[bold cyan]ThinkingPipe {mode}[/bold cyan]\n"
             f"사물: [bold]{topic}[/bold]\n"
             f"출력: {output}",
-            title="🎬 사물쇼츠 파이프라인",
+            title="[ThinkingPipe] 사물쇼츠 파이프라인",
             border_style="cyan",
         )
     )
 
     # ── Step 1: 아이디어 프레임 생성 ──
-    console.print("\n[bold]Step 1/6 — 아이디어 프레임 생성[/bold]")
+    console.print("\n[bold]Step 1/6 -아이디어 프레임 생성[/bold]")
     idea = generate_idea(topic, cfg, dry_run=dry_run)
 
     if not review_gate("아이디어 프레임", idea, dry_run=dry_run, auto_approve=auto_approve):
         _abort()
 
     # ── Step 2: 60초 대본 생성 ──
-    console.print("\n[bold]Step 2/6 — 60초 독백 대본 생성[/bold]")
+    console.print("\n[bold]Step 2/6 -60초 독백 대본 생성[/bold]")
     script_data = generate_script(idea, cfg, dry_run=dry_run)
 
     if not review_gate("대본", script_data, dry_run=dry_run, auto_approve=auto_approve):
         _abort()
 
     # ── Step 3: 훅 최적화 ──
-    console.print("\n[bold]Step 3/6 — 훅 최적화[/bold]")
+    console.print("\n[bold]Step 3/6 -훅 최적화[/bold]")
     hook_result = optimize_hook(script_data, cfg, dry_run=dry_run)
 
     if not review_gate("훅 최적화", hook_result, dry_run=dry_run, auto_approve=auto_approve):
@@ -95,21 +102,21 @@ def main(topic: str, dry_run: bool, output: str, config: str, auto_approve: bool
         script_data["script"] = " ".join(s["text"] for s in script_data["sections"])
 
     # ── Step 4: 영상 + TTS 생성 ──
-    console.print("\n[bold]Step 4/6 — TTS 음성 + 영상 프롬프트 생성[/bold]")
+    console.print("\n[bold]Step 4/6 -TTS 음성 + 영상 프롬프트 생성[/bold]")
     video_result = generate_video(script_data, cfg, output, dry_run=dry_run)
 
     if not review_gate("영상 생성", video_result, dry_run=dry_run, auto_approve=auto_approve):
         _abort()
 
     # ── Step 5: 썸네일 생성 ──
-    console.print("\n[bold]Step 5/6 — 썸네일 생성[/bold]")
+    console.print("\n[bold]Step 5/6 -썸네일 생성[/bold]")
     thumb_result = generate_thumbnail(script_data, cfg, output, dry_run=dry_run)
 
     if not review_gate("썸네일", thumb_result, dry_run=dry_run, auto_approve=auto_approve):
         _abort()
 
     # ── Step 6: 업로드 준비 ──
-    console.print("\n[bold]Step 6/6 — 업로드 준비[/bold]")
+    console.print("\n[bold]Step 6/6 -업로드 준비[/bold]")
     upload_result = upload_video(
         script_data, video_result, thumb_result, output, cfg, dry_run=dry_run
     )
@@ -119,9 +126,9 @@ def main(topic: str, dry_run: bool, output: str, config: str, auto_approve: bool
     console.print(
         Panel(
             f"[bold green]파이프라인 완료![/bold green]\n\n"
-            f"📁 {output}\n"
+            f"출력: {output}\n"
             f"상태: {upload_result['status']}",
-            title="✅ ThinkingPipe 완료",
+            title="[OK] ThinkingPipe 완료",
             border_style="green",
         )
     )

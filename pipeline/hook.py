@@ -1,7 +1,5 @@
 """Step 3: 훅 최적화 — 첫 3초 질문/선언 강화"""
 
-import anthropic
-
 HOOK_PROMPT = """\
 당신은 유튜브 쇼츠 훅 전문가입니다.
 아래 대본의 훅(첫 3초)을 분석하고 3가지 대안을 제시하세요.
@@ -51,6 +49,7 @@ def optimize_hook(script_data: dict, config: dict, dry_run: bool = False) -> dic
             "reason": "[DRY-RUN] 직접 선언이 사물쇼츠에서 가장 효과적",
         }
 
+    import anthropic
     client = anthropic.Anthropic()
     claude_config = config.get("claude", {})
 

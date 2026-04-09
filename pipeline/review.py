@@ -1,4 +1,4 @@
-"""Step 6: 판단 게이트 — 사람이 y/n으로 검수"""
+"""Step 6: 판단 게이트 -사람이 y/n으로 검수"""
 
 from rich.console import Console
 from rich.panel import Panel
@@ -39,9 +39,9 @@ def review_gate(
     approved = response in ("y", "yes", "ㅛ", "네")
 
     if approved:
-        console.print("[green]✓ 승인됨[/green]")
+        console.print("[green]>> 승인됨[/green]")
     else:
-        console.print("[red]✗ 거부됨 — 파이프라인 중단[/red]")
+        console.print("[red]>> 거부됨 -- 파이프라인 중단[/red]")
 
     return approved
 
@@ -67,7 +67,7 @@ def _print_dict(data: dict, stage: str):
         console.print(f"[dim]{data.get('analysis', '')}[/dim]")
         console.print()
         for i, alt in enumerate(data["alternatives"]):
-            marker = " [green]★ 추천[/green]" if i == data.get("recommended", -1) else ""
+            marker = " [green]* 추천[/green]" if i == data.get("recommended", -1) else ""
             console.print(f"  [{i+1}] {alt['hook']}{marker}")
             console.print(f"      [dim]{alt['strategy']}[/dim]")
 

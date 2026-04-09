@@ -41,24 +41,24 @@ def upload_video(
 
     # Save metadata
     meta_path = out / "upload_metadata.json"
-    meta_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2))
+    meta_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8")
 
     # Save Veo prompt separately
     veo_path = out / "veo_prompt.txt"
     veo_prompt = video_result.get("veo_prompt", "")
-    veo_path.write_text(veo_prompt)
+    veo_path.write_text(veo_prompt, encoding="utf-8")
 
     if not dry_run:
         console.print()
         console.print(
             Panel(
                 "[bold green]업로드 준비 완료[/bold green]\n\n"
-                f"📁 출력 폴더: {out}\n"
-                f"🎬 영상: {metadata['files']['video']}\n"
-                f"🖼️  썸네일: {metadata['files']['thumbnail']}\n"
-                f"🎙️  나레이션: {metadata['files']['narration']}\n"
-                f"📋 메타데이터: {meta_path}\n"
-                f"🎨 Veo 프롬프트: {veo_path}\n\n"
+                f"[출력 폴더] {out}\n"
+                f"[영상]      {metadata['files']['video']}\n"
+                f"[썸네일]    {metadata['files']['thumbnail']}\n"
+                f"[나레이션]  {metadata['files']['narration']}\n"
+                f"[메타데이터] {meta_path}\n"
+                f"[Veo 프롬프트] {veo_path}\n\n"
                 "[dim]YouTube Studio에서 수동 업로드하세요.[/dim]",
                 border_style="green",
             )

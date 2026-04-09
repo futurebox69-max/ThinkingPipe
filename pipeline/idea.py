@@ -1,7 +1,5 @@
 """Step 1: 사물 아이디어 확장 — Thinking OS 5단계 프레임 설계"""
 
-import anthropic
-
 IDEA_PROMPT = """\
 당신은 '사물쇼츠' 크리에이터입니다.
 주어진 사물을 주인공으로, Thinking OS 5단계 독백 프레임을 설계하세요.
@@ -45,6 +43,7 @@ def generate_idea(topic: str, config: dict, dry_run: bool = False) -> dict:
             "emotional_arc": "무심 → 공감 → 불편 → 각성 → 따뜻함",
         }
 
+    import anthropic
     client = anthropic.Anthropic()
     claude_config = config.get("claude", {})
 
