@@ -401,28 +401,28 @@ HTML_TEMPLATE = r"""
 
 <div class="hero">
   <h1>ThinkingPipe</h1>
-  <p>Thinking OS 5 Steps applied to 60-second Object Monologue Shorts</p>
+  <p>Thinking OS 5단계를 60초 사물 독백 쇼츠에 적용</p>
 </div>
 
 <div class="pipeline-steps" id="steps">
-  <div class="step-dot" data-step="0">1. Idea Frame</div>
+  <div class="step-dot" data-step="0">1. 아이디어 프레임</div>
   <span class="step-arrow">&rarr;</span>
-  <div class="step-dot" data-step="1">2. 60s Script</div>
+  <div class="step-dot" data-step="1">2. 60초 대본</div>
   <span class="step-arrow">&rarr;</span>
-  <div class="step-dot" data-step="2">3. Hook Optimize</div>
+  <div class="step-dot" data-step="2">3. 훅 최적화</div>
   <span class="step-arrow">&rarr;</span>
-  <div class="step-dot" data-step="3">4. Complete</div>
+  <div class="step-dot" data-step="3">4. 완료</div>
 </div>
 
 <div class="container">
   <div class="input-card">
-    <label>What object should speak today?</label>
+    <label>오늘 어떤 사물이 말할까요?</label>
     <div class="input-row">
-      <input type="text" id="topic" placeholder="pencil, umbrella, eraser, cup..." value="pencil" autofocus />
-      <button class="btn btn-primary" id="runBtn" onclick="runPipeline()">Run Pipeline</button>
+      <input type="text" id="topic" placeholder="연필, 우산, 지우개, 컵..." value="연필" autofocus />
+      <button class="btn btn-primary" id="runBtn" onclick="runPipeline()">파이프라인 실행</button>
     </div>
     <div class="mode-toggle">
-      <label><input type="checkbox" id="dryRun" checked /> Dry-Run (no API calls)</label>
+      <label><input type="checkbox" id="dryRun" checked /> 테스트 모드 (API 호출 없음)</label>
     </div>
   </div>
 
@@ -458,16 +458,16 @@ function addCard(title, badge, badgeClass, bodyHTML) {
 
 function renderIdea(data) {
   const stages = [
-    { num: '1', label: 'Phenomenon', text: data.stage1_phenomenon },
-    { num: '2', label: 'Pattern', text: data.stage2_pattern },
-    { num: '3', label: 'Structure', text: data.stage3_structure },
-    { num: '4', label: 'Deconstruct', text: data.stage4_deconstruct },
-    { num: '5', label: 'Redesign', text: data.stage5_redesign },
+    { num: '1', label: '현상', text: data.stage1_phenomenon },
+    { num: '2', label: '패턴', text: data.stage2_pattern },
+    { num: '3', label: '구조', text: data.stage3_structure },
+    { num: '4', label: '전제 해체', text: data.stage4_deconstruct },
+    { num: '5', label: '재설계', text: data.stage5_redesign },
   ];
   let html = `<div style="margin-bottom:14px;color:var(--text-dim);font-size:0.9rem;">
-    <strong>Persona:</strong> ${data.persona}<br/>
-    <strong>Hook:</strong> ${data.hook_question}<br/>
-    <strong>Emotion Arc:</strong> ${data.emotional_arc}
+    <strong>페르소나:</strong> ${data.persona}<br/>
+    <strong>훅 질문:</strong> ${data.hook_question}<br/>
+    <strong>감정 흐름:</strong> ${data.emotional_arc}
   </div><div class="stage-grid">`;
   stages.forEach(s => {
     html += `<div class="stage-item">
@@ -494,11 +494,11 @@ function renderScript(data) {
     });
   }
   html += `<div class="meta-row">
-    <span>Characters: ${data.char_count || '?'}</span>
-    <span>Est. duration: ${data.estimated_seconds || '?'}s</span>
+    <span>글자 수: ${data.char_count || '?'}</span>
+    <span>예상 시간: ${data.estimated_seconds || '?'}초</span>
   </div>`;
   html += `<div style="margin-top:16px;">
-    <strong style="font-size:0.85rem;color:var(--text-dim);">Full Script</strong>
+    <strong style="font-size:0.85rem;color:var(--text-dim);">전체 대본</strong>
     <div class="full-script">${data.script || ''}</div>
   </div>`;
   return html;
@@ -506,7 +506,7 @@ function renderScript(data) {
 
 function renderHook(data) {
   let html = `<div style="margin-bottom:14px;">
-    <span style="color:var(--text-dim);font-size:0.9rem;">Current hook:</span><br/>
+    <span style="color:var(--text-dim);font-size:0.9rem;">현재 훅:</span><br/>
     <span style="font-size:1.1rem;">${data.original_hook}</span>
   </div>
   <div style="color:var(--text-dim);font-size:0.85rem;margin-bottom:16px;">${data.analysis}</div>`;
@@ -515,7 +515,7 @@ function renderHook(data) {
     data.alternatives.forEach((alt, i) => {
       const isRec = i === data.recommended;
       html += `<div class="hook-alt ${isRec ? 'recommended' : ''}">
-        <div class="hook-text">${alt.hook}${isRec ? '<span class="rec-badge">RECOMMENDED</span>' : ''}</div>
+        <div class="hook-text">${alt.hook}${isRec ? '<span class="rec-badge">추천</span>' : ''}</div>
         <div class="hook-strategy">${alt.strategy}</div>
       </div>`;
     });
@@ -533,7 +533,7 @@ async function runPipeline() {
 
   const btn = document.getElementById('runBtn');
   btn.disabled = true;
-  btn.textContent = 'Running...';
+  btn.textContent = '실행 중...';
   resultsEl.innerHTML = '';
   setStep(0);
 
@@ -542,8 +542,8 @@ async function runPipeline() {
 
   try {
     // Step 1: Idea
-    const loadingCard = addCard('Step 1/3 - Idea Frame', 'generating...', 'badge-loading',
-      '<div><span class="spinner"></span>Generating Thinking OS 5-stage idea frame...</div>');
+    const loadingCard = addCard('Step 1/3 - 아이디어 프레임', '생성 중...', 'badge-loading',
+      '<div><span class="spinner"></span>Thinking OS 5단계 아이디어 프레임 생성 중...</div>');
 
     const ideaRes = await fetch('/api/idea', {
       method: 'POST',
@@ -552,12 +552,12 @@ async function runPipeline() {
     });
     const idea = await ideaRes.json();
     loadingCard.remove();
-    addCard(`Step 1/3 - Idea Frame: ${idea.topic}`, badge, badgeClass, renderIdea(idea));
+    addCard(`Step 1/3 - 아이디어 프레임: ${idea.topic}`, badge, badgeClass, renderIdea(idea));
     setStep(1);
 
     // Step 2: Script
-    const loadingCard2 = addCard('Step 2/3 - 60s Script', 'generating...', 'badge-loading',
-      '<div><span class="spinner"></span>Writing 60-second monologue script...</div>');
+    const loadingCard2 = addCard('Step 2/3 - 60초 대본', '생성 중...', 'badge-loading',
+      '<div><span class="spinner"></span>60초 독백 대본 작성 중...</div>');
 
     const scriptRes = await fetch('/api/script', {
       method: 'POST',
@@ -566,12 +566,12 @@ async function runPipeline() {
     });
     const script = await scriptRes.json();
     loadingCard2.remove();
-    addCard(`Step 2/3 - Script: ${script.title}`, badge, badgeClass, renderScript(script));
+    addCard(`Step 2/3 - 대본: ${script.title}`, badge, badgeClass, renderScript(script));
     setStep(2);
 
     // Step 3: Hook
-    const loadingCard3 = addCard('Step 3/3 - Hook Optimization', 'analyzing...', 'badge-loading',
-      '<div><span class="spinner"></span>Analyzing and optimizing the hook...</div>');
+    const loadingCard3 = addCard('Step 3/3 - 훅 최적화', '분석 중...', 'badge-loading',
+      '<div><span class="spinner"></span>훅을 분석하고 최적화하는 중...</div>');
 
     const hookRes = await fetch('/api/hook', {
       method: 'POST',
@@ -580,14 +580,14 @@ async function runPipeline() {
     });
     const hook = await hookRes.json();
     loadingCard3.remove();
-    addCard('Step 3/3 - Hook Optimization', badge, badgeClass, renderHook(hook));
+    addCard('Step 3/3 - 훅 최적화', badge, badgeClass, renderHook(hook));
     setStep(3);
 
   } catch (err) {
-    addCard('Error', 'ERROR', 'badge-dry', `<div style="color:var(--red)">${err.message}</div>`);
+    addCard('오류 발생', '오류', 'badge-dry', `<div style="color:var(--red)">${err.message}</div>`);
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Run Pipeline';
+    btn.textContent = '파이프라인 실행';
   }
 }
 
