@@ -418,11 +418,17 @@ HTML_TEMPLATE = r"""
   <div class="input-card">
     <label>오늘 어떤 사물이 말할까요?</label>
     <div class="input-row">
-      <input type="text" id="topic" placeholder="연필, 우산, 지우개, 컵..." value="연필" autofocus />
-      <button class="btn btn-primary" id="runBtn" onclick="runPipeline()">파이프라인 실행</button>
+      <input type="text" id="topic" placeholder="연필, 우산, 지우개, 컵..." value="" autofocus />
     </div>
-    <div class="mode-toggle">
-      <label><input type="checkbox" id="dryRun" checked /> 테스트 모드 (API 호출 없음)</label>
+    <label style="margin-top:16px;">이 사물로 전달하고 싶은 메시지는?</label>
+    <div class="input-row">
+      <textarea id="message" rows="2" placeholder="예: 매일 쓰면서도 고마운 줄 모르는 존재에 대한 반성&#10;예: 빠르게 소비되고 버려지는 관계에 대한 비유" style="flex:1;padding:14px 18px;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:1rem;font-family:inherit;outline:none;resize:vertical;transition:border 0.2s;"></textarea>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;">
+      <div class="mode-toggle">
+        <label><input type="checkbox" id="dryRun" checked /> 테스트 모드 (API 호출 없음)</label>
+      </div>
+      <button class="btn btn-primary" id="runBtn" onclick="runPipeline()">파이프라인 실행</button>
     </div>
   </div>
 
@@ -528,8 +534,10 @@ function renderHook(data) {
 
 async function runPipeline() {
   const topic = document.getElementById('topic').value.trim();
+  const message = document.getElementById('message').value.trim();
   const dryRun = document.getElementById('dryRun').checked;
-  if (!topic) return;
+  if (!topic) { alert('사물을 입력하세요'); return; }
+  if (!message) { alert('전달하고 싶은 메시지를 입력하세요'); return; }
 
   const btn = document.getElementById('runBtn');
   btn.disabled = true;
@@ -548,7 +556,7 @@ async function runPipeline() {
     const ideaRes = await fetch('/api/idea', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ topic, dry_run: dryRun })
+      body: JSON.stringify({ topic, message, dry_run: dryRun })
     });
     const idea = await ideaRes.json();
     loadingCard.remove();
@@ -617,9 +625,10 @@ def index():
 @app.route("/api/idea", methods=["POST"])
 def api_idea():
     data = request.json
-    topic = data.get("topic", "pencil")
+    topic = data.get("topic", "")
+    message = data.get("message", "")
     dry_run = data.get("dry_run", True)
-    result = generate_idea(topic, CONFIG, dry_run=dry_run)
+    result = generate_idea(topic, CONFIG, dry_run=dry_run, message=message)
     return jsonify(result)
 
 @app.route("/api/script", methods=["POST"])

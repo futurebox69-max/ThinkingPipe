@@ -48,22 +48,26 @@ def generate_script(idea: dict, config: dict, dry_run: bool = False) -> dict:
     """아이디어 프레임에서 60초 사물 독백 대본을 생성한다."""
     if dry_run:
         topic = idea["topic"]
-        script_text = (
-            f"당신이 마지막으로 {topic}을 진심으로 바라본 게 언제였나요? "
-            f"나는 {topic}입니다. 매일 당신 곁에 있지만, 당신은 나를 보지 않죠. "
-            f"그게 익숙함의 구조입니다. 하지만 정말 그래야 할까요? "
-            f"오늘, 나를 한 번만 다시 바라봐 주세요."
-        )
+        msg = idea.get("message", "")
+        hook = idea.get("hook_question", f"지금 손에 든 {topic}, 이름이 뭔지 아세요?")
+        s1 = idea.get("stage1_phenomenon", "")
+        s2 = idea.get("stage2_pattern", "")
+        s3 = idea.get("stage3_structure", "")
+        s4 = idea.get("stage4_deconstruct", "")
+        s5 = idea.get("stage5_redesign", msg)
+
+        sections = [
+            {"time": "0-3s", "label": "훅", "text": hook},
+            {"time": "3-15s", "label": "현상+패턴", "text": f"{s1} {s2}"},
+            {"time": "15-35s", "label": "구조+전제해체", "text": f"{s3} {s4}"},
+            {"time": "35-55s", "label": "재설계", "text": s5},
+            {"time": "55-60s", "label": "마무리", "text": f"...그게, {topic}인 내가 당신에게 하고 싶은 말이었어요."},
+        ]
+        script_text = " ".join(s["text"] for s in sections)
         return {
-            "title": f"[DRY-RUN] {topic}의 독백",
+            "title": f"[테스트] {topic}의 독백",
             "script": script_text,
-            "sections": [
-                {"time": "0-3s", "label": "훅", "text": f"당신이 마지막으로 {topic}을 진심으로 바라본 게 언제였나요?"},
-                {"time": "3-15s", "label": "현상+패턴", "text": f"나는 {topic}입니다. 매일 당신 곁에 있지만, 당신은 나를 보지 않죠."},
-                {"time": "15-35s", "label": "구조+전제해체", "text": "그게 익숙함의 구조입니다. 하지만 정말 그래야 할까요?"},
-                {"time": "35-55s", "label": "재설계", "text": "오늘, 나를 한 번만 다시 바라봐 주세요."},
-                {"time": "55-60s", "label": "마무리", "text": "...그게 시작이니까요."},
-            ],
+            "sections": sections,
             "char_count": len(script_text),
             "estimated_seconds": 60,
         }

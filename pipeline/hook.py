@@ -36,17 +36,17 @@ def optimize_hook(script_data: dict, config: dict, dry_run: bool = False) -> dic
     current_hook = script_data["sections"][0]["text"]
 
     if dry_run:
-        topic = script_data["title"].replace("[DRY-RUN] ", "").replace("의 독백", "")
+        topic = script_data["title"].replace("[테스트] ", "").replace("[DRY-RUN] ", "").replace("의 독백", "")
         return {
             "original_hook": current_hook,
-            "analysis": "[DRY-RUN] 훅 분석 — 호기심 유발은 되나 임팩트 부족",
+            "analysis": f"[테스트] 현재 훅이 {topic}의 핵심 메시지와 연결되는지 점검 필요",
             "alternatives": [
-                {"hook": f"나는 {topic}인데, 할 말이 있어.", "strategy": "직접 선언형"},
-                {"hook": f"{topic}이 울고 있다면?", "strategy": "감정 충격형"},
-                {"hook": f"매일 쓰면서 한 번도 안 본 것.", "strategy": "공감 질문형"},
+                {"hook": f"나는 {topic}인데, 할 말이 있어.", "strategy": "직접 선언형 -- 사물이 입을 여는 반전"},
+                {"hook": f"당신이 버린 {topic}, 아직 거기 있어.", "strategy": "감정 충격형 -- 죄책감 유발"},
+                {"hook": f"매일 쓰면서 한 번도 안 본 것.", "strategy": "공감 질문형 -- 시청자 자기 점검"},
             ],
             "recommended": 0,
-            "reason": "[DRY-RUN] 직접 선언이 사물쇼츠에서 가장 효과적",
+            "reason": f"[테스트] 직접 선언이 사물쇼츠에서 스크롤 멈춤에 가장 효과적",
         }
 
     import anthropic
